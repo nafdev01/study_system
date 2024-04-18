@@ -1,0 +1,45 @@
+{% extends 'unbase.html' %}
+{% load static %}
+
+{% block title %}Sign Up{% endblock title %}
+
+{% block header %}
+<div class="d-flex justify-content-center">
+	<a href="#" class="text-nowrap logo-img text-center d-block py-3">
+		<img class="rounded-circle" src="{% static 'assets/images/logos/favicon.ico' %}" width="80" alt="">
+	</a>
+</div>
+<p class="text-center">Sign up to use this service</p>
+{% endblock header %}
+
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	<div class="mb-3"><label class="form-label" for="id_username">Username</label><input type="text" name="username"
+			maxlength="150" autocapitalize="none" autocomplete="username" autofocus class="form-control"
+			placeholder="Username" required aria-describedby="id_username_helptext" id="id_username">
+		<div class="form-text">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</div>
+	</div>
+	<div class="mb-3"><label class="form-label" for="id_password1">Password</label><input type="password"
+			name="password1" autocomplete="new-password" class="form-control" placeholder="Password" required
+			aria-describedby="id_password1_helptext" id="id_password1">
+		<div class="form-text">
+			Your password can't be too similar to your other personal information, must contain at least 8 characters,
+			can't be a commonly used password and can't be entirely numeric.</li>
+			</ul>
+		</div>
+	</div>
+	<div class="mb-3"><label class="form-label" for="id_password2">Password confirmation</label><input type="password"
+			name="password2" autocomplete="new-password" class="form-control" placeholder="Password confirmation"
+			required aria-describedby="id_password2_helptext" id="id_password2">
+		<div class="form-text">Enter the same password as before, for verification.</div>
+	</div>
+	<button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
+		Sign Up
+	</button>
+	<div class="d-flex align-items-center justify-content-center">
+		<p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
+		<a class="text-primary fw-bold ms-2" href="{% url 'login' %}">Sign In</a>
+	</div>
+</form>
+{% endblock content %}

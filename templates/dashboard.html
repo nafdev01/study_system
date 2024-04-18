@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load notes_tags %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+        {% dash_certs request.user %}
+</div>
+{% endblock content %}

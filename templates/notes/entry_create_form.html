@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Create Entry{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+	<div class="card">
+		<div class="card-body">
+			<h1>Create a new entry</h1>
+			<p>Fill on the form fields as required</p>
+
+			<form method="post" onsubmit="createEntry()" id="entry-form">
+				{% csrf_token %}
+				<div class="mb-3">
+					<label for="id_name" class="form-label">Name</label>
+					<input type="text" class="form-control" id="id_name" name="name" required>
+				</div>
+				<div class="form-group mb-3">
+					<label for="id_content" class="form-label">Content</label>
+					<textarea id="id_content" name="content"></textarea>
+				</div>
+				<button class="btn btn-outline-success" type="submit">Add Entry</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	const easyMDE = new EasyMDE({ element: document.getElementById('id_content') });
+
+	function createEntry(event) {
+		event.preventDefault();
+		const form = document.querySelector('#entry-form');
+		const textarea = form.querySelector('#id_content');
+		textarea.value = easyMDE.value();
+		form.submit();
+	};
+</script>
+{% endblock %}

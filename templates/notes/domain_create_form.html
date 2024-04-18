@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Create Domain{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="card">
+		<div class="card-body">
+			<h1>Add a new domain</h1>
+			<p>Fill on the form fields as required</p>
+
+			<form method="post">
+				{% bootstrap_form form %}
+				{% csrf_token %}
+				<input class="btn btn-outline-success" type="submit" value="Add Domain">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

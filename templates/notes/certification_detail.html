@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ certification.abbreviation }}{% endblock title %}
+
+{% block content %}
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ certification }}
+        </li>
+    </ol>
+</nav>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-success" href="{% url 'create_domain' certification.id %}">
+            <i class="ti ti-plus"></i>
+            Add Domain
+        </a>
+    </div>
+
+    <p class="display-3 text-center text-dark mb-5">{{ certification }}</p>
+
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        {% for domain in certification.domains.all %}
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+                            <div class="card domain-card" onclick="openDomain(this)"
+                                data-url="{{ domain.get_absolute_url }}">
+                                <div class="card-body">
+                                    <h5 class="text-center">Domain&nbsp;{{domain.number}}.&nbsp;{{domain.name }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    {% for term in certification.terms.all %}
+                    <button type="button" class="btn btn-sm btn-primary m-1 text-center" title="{{ term.definition }}">
+                        {{ term.name }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

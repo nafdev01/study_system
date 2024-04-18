@@ -1,0 +1,112 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'assets/images/logos/favicon.png' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/silverBox.css' %}">
+    <script src="{% static 'assets/js/silverBox.js' %}"></script>
+</head>
+
+<body>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+        data-sidebar-position="fixed" data-header-position="fixed">
+        <div
+            class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center w-100">
+                <div class="row justify-content-center w-100">
+                    <div class="col-md-8 col-lg-6 col-xxl-3">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'success' %}
+                                <script>
+                                    var message = "{{ message|safe }}";
+                                    var alertType = "success";
+
+                                    silverBox({
+                                        alertIcon: "success",
+                                        position: "top-right",
+                                        text: message,
+                                        centerContent: true,
+                                        cancelButton: {
+                                            text: "OK",
+                                        }
+                                    })
+                                </script>
+                                {% elif message.tags == 'info' %}
+                                <script>
+                                    var message = "{{ message|safe }}";
+                                    var alertType = "info";
+
+                                    silverBox({
+                                        alertIcon: alertType,
+                                        position: "top-right",
+                                        text: message,
+                                        centerContent: true,
+                                        cancelButton: {
+                                            text: "OK"
+                                        }
+                                    })
+                                </script>
+
+                                {% elif message.tags == 'warning' %}
+                                <script>
+                                    var message = "{{ message|safe }}";
+                                    var alertType = "warning";
+
+                                    silverBox({
+                                        alertIcon: alertType,
+                                        position: "top-right",
+                                        text: message,
+                                        centerContent: true,
+                                        cancelButton: {
+                                            text: "Close"
+                                        }
+                                    })
+                                </script>
+
+                                {% elif message.tags == 'error' %}
+                                <script>
+                                    var message = "{{ message|safe }}";
+                                    var alertType = "error";
+
+                                    silverBox({
+                                        alertIcon: alertType,
+                                        position: "top-right",
+                                        text: message,
+                                        centerContent: true,
+                                        cancelButton: {
+                                            text: "Close"
+                                        }
+                                    })
+                                </script>
+
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+
+                                {% block header %}
+                                {% endblock header %}
+
+                                {% block content %}
+                                {% endblock content %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'assets/libs/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

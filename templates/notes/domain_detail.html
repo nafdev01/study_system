@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ domain.name }}{% endblock title %}
+
+{% block content %}
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ domain.certification.get_absolute_url }}">
+                {{ domain.certification }}
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ domain.name }}
+        </li>
+    </ol>
+</nav>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-success" href="{% url 'create_entry' domain.id %}">
+            <i class="ti ti-plus"></i>
+            Add Entry
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <p class="display-5 text-center text-dark">{{ domain }}</p>
+
+            <div class="row">
+                <div class="col-12">
+                    <h5 class="text-center">Domain&nbsp;{{domain.number}}.&nbsp;{{domain.name }}</h5>
+                    <div class="table-responsive">
+                        <table id="myTable" class="display">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h5 class="fw-semibold mb-0">Name</h5>
+                                    </th>
+                                    <th>
+                                        <h5 class="fw-semibold mb-0 me-0">Updated On</h5>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in domain.entries.all %}
+                                <tr class="">
+                                    <td class="">
+                                        <h6 class="fw-semibold mb-0">
+                                            <a class="link-dark" href="{{entry.get_absolute_url}}">{{entry.name}}</a>
+                                        </h6>
+                                    </td>
+                                    <td class="">
+                                        <span class="fw-normal">{{entry.updated}}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#myTable').DataTable({
+        dom: 'Bfrtip',
+        pageLength: 10,
+        scrollX: true,
+        scrollY: true
+    });
+</script>
+{% endblock content %}

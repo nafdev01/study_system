@@ -1,0 +1,45 @@
+{% extends 'unbase.html' %}
+{% load static %}
+
+{% block title %}Sign In{% endblock title %}
+
+{% block header %}
+<div class="d-flex justify-content-center">
+	<a href="#" class="text-nowrap logo-img text-center d-block py-3">
+		<img class="rounded-circle" src="{% static 'assets/images/logos/favicon.ico' %}" width="80" alt="">
+	</a>
+</div>
+<p class="text-center">Log in to access your notes</p>
+{% endblock header %}
+
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	<div class="mb-3">
+		<label for="id_username" class="form-label">Username</label>
+		<input type="text" class="form-control" id="id_username" aria-describedby="emailHelp" name="username">
+	</div>
+	<div class="mb-4">
+		<label for="id_password" class="form-label">Password</label>
+		<input type="password" class="form-control" id="id_password" name="password">
+	</div>
+	<div class="d-flex align-items-center justify-content-between mb-4">
+		<div class="form-check">
+			<input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked>
+			<label class="form-check-label text-dark" for="flexCheckChecked">
+				Remeber this Device
+			</label>
+		</div>
+		<a class="text-primary fw-bold" href="{% url 'password_reset' %}">Forgot
+			Password ?</a>
+	</div>
+	<button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
+		Sign In
+	</button>
+	<div class="d-flex align-items-center justify-content-center">
+		<p class="fs-4 mb-0 fw-bold">New Student?</p>
+		<a class="text-primary fw-bold ms-2" href="{% url 'signup' %}">Create an
+			account</a>
+	</div>
+</form>
+{% endblock content %}
