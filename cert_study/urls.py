@@ -19,14 +19,15 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from notes.views import DashboardView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", TemplateView.as_view(template_name="dashboard.html"), name="dashboard"),
+    path("", DashboardView.as_view(), name="dashboard"),
     path("", include("accounts.urls")),
     path("", include("notes.urls")),
     path("", include("glossary.urls")),
+    path("", include("planner.urls")),
 ]
 
 if settings.DEBUG:

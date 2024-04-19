@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block custom_css %}
+<script src="{% static 'assets/js/fullcalendar.min.js' %}"></script>
+{% endblock custom_css %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row page-titles mx-0">
+        <div class="col-sm-6 p-md-0">
+            <div class="welcome-text">
+                <h4>Hi, welcome back!</h4>
+                <p class="mb-0">Your business dashboard template</p>
+            </div>
+        </div>
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">App</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Calerdar</a></li>
+            </ol>
+        </div>
+    </div>
+    <!-- row -->
+
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-intro-title">Calendar</h4>
+
+                    <div class="">
+                        <div id="external-events" class="my-3">
+                            <p>Drag and drop your event or click in the calendar</p>
+                            <div class="external-event" data-class="bg-primary"><i class="fa fa-move"></i>New Theme
+                                Release</div>
+                            <div class="external-event" data-class="bg-success"><i class="fa fa-move"></i>My Event
+                            </div>
+                            <div class="external-event" data-class="bg-warning"><i class="fa fa-move"></i>Meet manager
+                            </div>
+                            <div class="external-event" data-class="bg-dark"><i class="fa fa-move"></i>Create New theme
+                            </div>
+                        </div>
+                        <!-- checkbox -->
+                        <div class="checkbox checkbox-event pt-3 pb-5">
+                            <input id="drop-remove" class="styled-checkbox" type="checkbox">
+                            <label class="ml-2 mb-0" for="drop-remove">Remove After Drop</label>
+                        </div>
+                        <a href="javascript:void()" data-toggle="modal" data-target="#add-category"
+                            class="btn btn-primary btn-event w-100">
+                            <span class="align-middle"><i class="ti-plus"></i></span> Create New
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body">
+                    <div id="calendar" class="app-fullcalendar"></div>
+                </div>
+            </div>
+        </div>
+        <!-- BEGIN MODAL -->
+        <div class="modal fade none-border" id="event-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><strong>Add New Event</strong></h4>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success save-event waves-effect waves-light">Create
+                            event</button>
+
+                        <button type="button" class="btn btn-danger delete-event waves-effect waves-light"
+                            data-dismiss="modal">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Add Category -->
+        <div class="modal fade none-border" id="add-category">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><strong>Add a category</strong></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">Category Name</label>
+                                    <input class="form-control form-white" placeholder="Enter name" type="text"
+                                        name="category-name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Choose Category Color</label>
+                                    <select class="form-control form-white" data-placeholder="Choose a color..."
+                                        name="category-color">
+                                        <option value="success">Success</option>
+                                        <option value="danger">Danger</option>
+                                        <option value="info">Info</option>
+                                        <option value="pink">Pink</option>
+                                        <option value="primary">Primary</option>
+                                        <option value="warning">Warning</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger waves-effect waves-light save-category"
+                            data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block custom_js %}
+<script>
+    function djangoJsonToArray(djangoJson) {
+        let data = JSON.parse(djangoJson);
+
+        // Convert JSON to array
+        let arrayData = Object.keys(data).map(key => data[key]);
+
+        // Print array data
+        return arrayData;
+
+    }
+
+    var calendarEl = document.getElementById('calendar');
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialDate: `${yyyy}-${mm}-${dd}`,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            editable: true,
+            selectable: true,
+            businessHours: true,
+            dayMaxEvents: true, // allow "more" link when too many events
+            navLinks: true, // can click day/week names to navigate views
+            selectable: true,
+            selectMirror: true,
+
+            select: function (arg) {
+                var title = prompt('Event Title:');
+                if (title) {
+                    calendar.addEvent({
+                        title: title,
+                        start: arg.start,
+                        end: arg.end,
+                        allDay: arg.allDay
+                    })
+                }
+                calendar.unselect()
+            },
+            events: djangoJsonToArray('{{ myevents_json| safe}}'),
+        });
+
+        calendar.render();
+    });
+</script>
+{% endblock custom_js %}

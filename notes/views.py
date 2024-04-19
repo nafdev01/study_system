@@ -1,12 +1,19 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from django.core.mail import EmailMessage
-from django.template.loader import get_template
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import EmailMessage
 from django.db import IntegrityError
-from notes.models import Domain, Certification, Entry
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import get_template
+from django.views.generic import TemplateView
+
 from notes.forms import CertificationForm, DomainForm, EntryForm
+from notes.models import Certification, Domain, Entry
+
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = "dashboard.html"
 
 
 @login_required
@@ -232,9 +239,7 @@ def update_entry(request, entry_id):
 @login_required
 def delete_entry(request, entry_id):
     student = request.user
-    entry = Entry.objects.get(
-        id=entry_id, domain__certification__student_id=student.id
-    )
+    entry = Entry.objects.get(id=entry_id, domain__certification__student_id=student.id)
     entry_name = entry.name
     domain = entry.domain
 

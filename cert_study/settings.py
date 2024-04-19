@@ -39,9 +39,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 LOCAL_SERVER = os.getenv("LOCAL_SERVER", "False") == "True"
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "0.0.0.0,127.0.0.1,localhost").split(
-    ","
-)
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -50,6 +48,7 @@ INSTALLED_APPS = [
     "accounts",
     "notes",
     "glossary",
+    "planner",
     # 3rd party
     "daphne",
     "channels",
@@ -179,7 +178,7 @@ LOGIN_URL = "login"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.in.ngrok.io",
+    "https://*.ngrok-free.app",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://0.0.0.0:8000",
