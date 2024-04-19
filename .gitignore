@@ -180,3 +180,4 @@ cython_debug/
 .vscode
 data.json
 todo
+*.pem

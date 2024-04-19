@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "django_bootstrap5",
     "django.contrib.postgres",
+    "datetimepicker",
+    "django_extensions",
     # default apps
     "django.contrib.admin",
     "django.contrib.auth",

@@ -33,24 +33,13 @@
                     <div class="">
                         <div id="external-events" class="my-3">
                             <p>Drag and drop your event or click in the calendar</p>
-                            <div class="external-event" data-class="bg-primary"><i class="fa fa-move"></i>New Theme
-                                Release</div>
-                            <div class="external-event" data-class="bg-success"><i class="fa fa-move"></i>My Event
-                            </div>
-                            <div class="external-event" data-class="bg-warning"><i class="fa fa-move"></i>Meet manager
-                            </div>
-                            <div class="external-event" data-class="bg-dark"><i class="fa fa-move"></i>Create New theme
-                            </div>
                         </div>
                         <!-- checkbox -->
-                        <div class="checkbox checkbox-event pt-3 pb-5">
-                            <input id="drop-remove" class="styled-checkbox" type="checkbox">
-                            <label class="ml-2 mb-0" for="drop-remove">Remove After Drop</label>
-                        </div>
-                        <a href="javascript:void()" data-toggle="modal" data-target="#add-category"
-                            class="btn btn-primary btn-event w-100">
-                            <span class="align-middle"><i class="ti-plus"></i></span> Create New
-                        </a>
+                        <button class="btn btn-primary btn-event w-100" data-bs-toggle="modal"
+                            data-bs-target="#newEventModal" data-target="#add-category">
+                            <span class="align-middle"><i class="ti-plus"></i></span>
+                            <span>&nbsp;Create New</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -123,6 +112,8 @@
 
 </div>
 
+{% include 'includes/new-event-modal.html' with form=form %}
+
 {% endblock content %}
 
 {% block custom_js %}
@@ -147,6 +138,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            themeSystem: 'bootstrap5',
             initialDate: `${yyyy}-${mm}-${dd}`,
             headerToolbar: {
                 left: 'prev,next today',
@@ -162,21 +154,64 @@
             selectMirror: true,
 
             select: function (arg) {
-                var title = prompt('Event Title:');
-                if (title) {
-                    calendar.addEvent({
-                        title: title,
-                        start: arg.start,
-                        end: arg.end,
-                        allDay: arg.allDay
-                    })
-                }
-                calendar.unselect()
+                // click create new button and set the start time to that date at 12 noon in this format 2024-04-19 12:25:46
+                $('#newEventModal').modal('show');
+                $('#id_start_time').val(arg.startStr + ' 12:00:00');
             },
             events: djangoJsonToArray('{{ myevents_json| safe}}'),
         });
 
         calendar.render();
     });
+</script>
+
+<script>
+    var loc = window.location;
+    if (loc.protocol == 'https:') {
+        var wsStart = 'wss://'
+    }
+    else {
+        var wsStart = 'ws://';
+    }
+
+    var createMyEventAddress = `${wsStart}${window.location.host}/ws/event/create/`;
+    var createMyEventSocket = new WebSocket(createMyEventAddress);
+    createMyEventSocket.onopen = function (e) {
+        console.log(`The connection was setup successfully to "${createMyEventAddress}!`);
+    };
+    createMyEventSocket.onclose = function (e) {
+        console.log(`something unexpected happened when connecting to "${createMyEventAddress}" !`);
+        console.log(`Error: ${e}`);
+    };
+
+    document.querySelector("#create-new-event-btn").onclick = function (e) {
+        // e.preventDefault();
+
+        const name = document.querySelector("#id_name").value;
+        const start_time = document.querySelector("#id_start_time").value;
+        const end_time = document.querySelector("#id_end_time").value;
+
+
+        createMyEventSocket.send(JSON.stringify({ "name": name, "start_time": start_time, "end_time": end_time }));
+    };
+
+    createMyEventSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data);
+
+        silverBox({
+            title: {
+                alertIcon: "success",
+                text: `Created new event '${data.name}'!`,
+
+            },
+            text: `Start Time: ${data.start_time}\nEnd Time: ${data.end_time}`,
+            centerContent: true,
+            timer: 7500,
+            animation: {
+                duration: 1000,
+            }
+        })
+    };
 </script>
 {% endblock custom_js %}

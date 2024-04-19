@@ -16,8 +16,9 @@ class MyEvent(models.Model):
         WARNING = "WR", "Warning"
 
     name = models.CharField(max_length=50)
-    event_on = models.DateField(auto_now=False, auto_now_add=False)
-    added_on = models.DateTimeField(default=timezone.now)
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(default=timezone.now)
+    added_on = models.DateTimeField(default=timezone.now, editable=False)
     category = models.CharField(
         max_length=2,
         choices=Category.choices,
@@ -26,9 +27,15 @@ class MyEvent(models.Model):
 
     def __str__(self):
         """Unicode representation of MyEvent."""
-        return f"{self.name} on {self.event_on}"
+        return f"{self.name} from {self.start_time} to {self.end_time}"
+
+    def save(self, *args, **kwargs):
+        if self.start_time > self.end_time:
+            raise ValueError("Start time must be before end time")
+        self.added_on = timezone.now()
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "My Event"
         verbose_name_plural = "My Events"
-        ordering = ["event_on"]
+        ordering = ["start_time"]

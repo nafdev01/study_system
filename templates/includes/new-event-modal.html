@@ -1,0 +1,18 @@
+<div class="modal fade" id="newEventModal" data-bs-keyboard="true" tabindex="-1" aria-labelledby="newEventModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="display-6 text-center text-dark">Adding new Event</p>
+                <div class="container-fluid">
+                    <!-- add django form -->
+                    {{ form.as_p }}
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="create-new-event-btn" class="btn btn-success rounded-pill mx-2" role="button"
+                        type="submit">Add Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

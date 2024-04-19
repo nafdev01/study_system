@@ -35,6 +35,13 @@ def login(request):
                 return redirect("dashboard")
             else:
                 messages.error(request, "Invalid username or password.")
+                return redirect("login")
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
+
+            return redirect("login")
 
     template_path = "registration/login.html"
     context = {"form": form}
