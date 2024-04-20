@@ -14,11 +14,11 @@ def calendar_view(request):
     # make a javascript array of events with the title set to the event name and the start set to the event start time and the end set to the event end time
     myevents_json = [
         {
-            "title": event.name,
-            "start": event.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
-            "end": event.end_time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "id": myevent.id,
+            "title": myevent.name,
+            "start": myevent.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
         }
-        for event in myevents
+        for myevent in myevents
     ]
 
     # Convert the list of dictionaries to a JSON string

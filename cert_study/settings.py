@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     "django.contrib.postgres",
     "datetimepicker",
-    "django_extensions",
     # default apps
     "django.contrib.admin",
     "django.contrib.auth",

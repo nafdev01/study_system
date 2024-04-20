@@ -24,13 +24,11 @@ async def custom_save_term_inline(text_data):
 
 class TermInlineConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["certification_id"]
-        self.room_group_name = f"entry_{self.room_name}"
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_layer)
+        pass
+
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)

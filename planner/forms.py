@@ -11,6 +11,5 @@ class MyEventForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "start_time": DateTimePickerInput(attrs={"class": "form-control"}),
-            "end_time": DateTimePickerInput(attrs={"class": "form-control"}),
             "category": forms.Select(attrs={"class": "form-control"}),
         }

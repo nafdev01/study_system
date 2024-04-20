@@ -10,15 +10,15 @@ async def custom_save_my_event(text_data):
     try:
         name = text_data["name"]
         start_time = text_data["start_time"]
-        end_time = text_data["end_time"]
-        my_event = MyEvent(name=name, start_time=start_time, end_time=end_time)
-        await database_sync_to_async(my_event.save)()
+        my_event, _created = await database_sync_to_async(
+            MyEvent.objects.update_or_create
+        )(name=name, defaults={"start_time": start_time})
         return my_event
     except Exception as e:
         print(f"Error: {e}")
 
 
-class NewEventConsumer(AsyncWebsocketConsumer):
+class EventConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
 
@@ -27,17 +27,53 @@ class NewEventConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        my_event = await custom_save_my_event(text_data_json)
 
-        try:
-            await self.send(
-                text_data=json.dumps(
-                    {
-                        "name": my_event.name,
-                        "start_time": my_event.start_time,
-                        "end_time": my_event.start_time,
-                    }
+        if text_data_json["ssup"] == "creating":
+            my_event = await custom_save_my_event(text_data_json)
+            try:
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "id": my_event.id,
+                            "name": my_event.name,
+                            "start_time": my_event.start_time,
+                            "ssup": "created",
+                        }
+                    )
                 )
-            )
-        except Exception as e:
-            print(f"Error when sending reply: {e}")
+            except Exception as e:
+                print(f"Error when sending reply: {e}")
+
+        elif text_data_json["ssup"] == "updating":
+            my_event = await custom_save_my_event(text_data_json)
+            try:
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "id": my_event.id,
+                            "name": my_event.name,
+                            "start_time": my_event.start_time,
+                            "ssup": "updated",
+                        }
+                    )
+                )
+            except Exception as e:
+                print(f"Error when sending reply: {e}")
+
+        elif text_data_json["ssup"] == "deleting":
+            try:
+                my_event = await database_sync_to_async(MyEvent.objects.get)(
+                    id=text_data_json["id"]
+                )
+                await database_sync_to_async(my_event.delete)()
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "name": text_data_json["name"],
+                            "id": text_data_json["id"],
+                            "ssup": "deleted",
+                        }
+                    )
+                )
+            except Exception as e:
+                print(f"Error when sending reply: {e}")

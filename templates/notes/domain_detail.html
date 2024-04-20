@@ -2,6 +2,26 @@
 
 {% block title %}{{ domain.name }}{% endblock title %}
 
+
+{% block custom_css %}
+<style>
+    input {
+        display: inline;
+        width: 100%;
+        padding: 6px 16px;
+        font-size: 0.8rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #5A6A85;
+        background-color: transparent;
+        background-clip: padding-box;
+        border: var(--bs-border-width) solid #DFE5EF;
+        border-radius: 10px;
+    }
+</style>
+{% endblock custom_css %}
+
+
 {% block content %}
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">

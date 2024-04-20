@@ -17,7 +17,6 @@ class MyEvent(models.Model):
 
     name = models.CharField(max_length=50)
     start_time = models.DateTimeField(default=timezone.now)
-    end_time = models.DateTimeField(default=timezone.now)
     added_on = models.DateTimeField(default=timezone.now, editable=False)
     category = models.CharField(
         max_length=2,
@@ -27,11 +26,9 @@ class MyEvent(models.Model):
 
     def __str__(self):
         """Unicode representation of MyEvent."""
-        return f"{self.name} from {self.start_time} to {self.end_time}"
+        return f"{self.name} from {self.start_time}"
 
     def save(self, *args, **kwargs):
-        if self.start_time > self.end_time:
-            raise ValueError("Start time must be before end time")
         self.added_on = timezone.now()
         super().save(*args, **kwargs)
 
