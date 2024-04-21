@@ -11,6 +11,10 @@ from notes.forms import CourseForm, DomainForm, EntryForm
 from notes.models import Course, Domain, Entry
 
 
+def home(request):
+    return render(request, "home.html")
+
+
 @login_required
 def dashboard(request):
     return render(request, "dashboard.html")
