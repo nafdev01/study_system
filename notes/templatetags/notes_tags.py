@@ -1,15 +1,15 @@
 from django import template
 from django.utils.safestring import mark_safe
 import markdown
-from notes.models import Certification
+from notes.models import Course
 
 register = template.Library()
 
 
-@register.inclusion_tag("includes/dash-certs.html")
-def dash_certs(student):
-    certifications = Certification.objects.filter(student_id=student.id)
-    return {"certifications": certifications}
+@register.inclusion_tag("includes/dash-courses.html")
+def dash_courses(student):
+    courses = Course.objects.filter(student_id=student.id)
+    return {"courses": courses}
 
 
 @register.filter(name="markdown")
@@ -17,7 +17,7 @@ def markdown_format(text):
     return mark_safe(markdown.markdown(text))
 
 
-@register.inclusion_tag("includes/nav-certs.html")
-def nav_certs(student):
-    certifications = Certification.objects.filter(student_id=student.id)
-    return {"certifications": certifications}
+@register.inclusion_tag("includes/nav-courses.html")
+def nav_courses(student):
+    courses = Course.objects.filter(student_id=student.id)
+    return {"courses": courses}

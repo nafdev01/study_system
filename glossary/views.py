@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
-from notes.models import Certification, Entry
+from notes.models import Course
 from glossary.models import Term
 from glossary.forms import TermForm, TermInlineForm
 
@@ -44,8 +44,8 @@ update views
 @login_required
 def update_term(request, term_id):
     student = request.user
-    term = get_object_or_404(Term, id=term_id, certification__student_id=student.id)
-    certification = term.certification
+    term = get_object_or_404(Term, id=term_id, course__student_id=student.id)
+    course = term.course
     if request.method != "POST":
         form = TermForm(student=student, instance=term)
     else:
@@ -57,7 +57,7 @@ def update_term(request, term_id):
                 updated_term.save()
                 messages.success(
                     request,
-                    f"Successfully created term '{updated_term}' in {certification.abbreviation}",
+                    f"Successfully created term '{updated_term}' in {course.abbreviation}",
                 )
                 return redirect(updated_term)
             except IntegrityError as e:
@@ -81,7 +81,7 @@ delete views
 @login_required
 def delete_term(request, term_id):
     student = request.user
-    term = Term.objects.get(id=term_id, certification__student_id=student.id)
+    term = Term.objects.get(id=term_id, course__student_id=student.id)
     term_name = term.name
 
     term.delete()

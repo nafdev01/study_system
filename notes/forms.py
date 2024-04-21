@@ -1,12 +1,12 @@
 # notes/forms.py
 from django.utils.translation import gettext_lazy as _
 from django import forms
-from notes.models import Certification, Domain, Entry
+from notes.models import Course, Domain, Entry
 
 
-class CertificationForm(forms.ModelForm):
+class CourseForm(forms.ModelForm):
     class Meta:
-        model = Certification
+        model = Course
         fields = ["name", "abbreviation", "about"]
         widgets = {
             "about": forms.Textarea(attrs={"cols": "40", "rows": "4"}),

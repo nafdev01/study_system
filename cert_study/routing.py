@@ -5,7 +5,7 @@ from planner.consumers import EventConsumer
 
 urlpatterns = [
     re_path(
-        r"ws/term/inline/create/(?P<certification_id>\w+)/$",
+        r"ws/term/inline/create/(?P<course_id>\w+)/$",
         TermInlineConsumer.as_asgi(),
     ),
     path("ws/event/", EventConsumer.as_asgi()),

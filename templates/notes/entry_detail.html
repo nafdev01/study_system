@@ -22,8 +22,8 @@
             <a href="{% url 'dashboard' %}">Home</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{ entry.domain.certification.get_absolute_url }}">
-                {{ entry.domain.certification }}
+            <a href="{{ entry.domain.course.get_absolute_url }}">
+                {{ entry.domain.course }}
             </a>
         </li>
         <li class="breadcrumb-item">
@@ -75,7 +75,7 @@
 
 {% block custom_js %}
 <script>
-    var certificationId = "{{ entry.domain.certification.id }}";
+    var courseId = "{{ entry.domain.course.id }}";
 
     var loc = window.location;
     if (loc.protocol == 'https:') {
@@ -85,7 +85,7 @@
         var wsStart = 'ws://';
     }
 
-    var termInlineAddress = `${wsStart}${window.location.host}/ws/term/inline/create/${certificationId}/`;
+    var termInlineAddress = `${wsStart}${window.location.host}/ws/term/inline/create/${courseId}/`;
     const termInlineSocket = new WebSocket(termInlineAddress);
     termInlineSocket.onopen = function (e) {
         console.log(`The connection was setup successfully to "${termInlineAddress}!`);
@@ -103,7 +103,7 @@
             "#definition-inline-input"
         ).value;
 
-        termInlineSocket.send(JSON.stringify({ term: term, definition: definition, certification_id: certificationId }));
+        termInlineSocket.send(JSON.stringify({ term: term, definition: definition, course_id: courseId }));
     };
     termInlineSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);

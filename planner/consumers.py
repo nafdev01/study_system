@@ -2,7 +2,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from notes.models import Certification
+from notes.models import Course
 from planner.models import MyEvent
 
 

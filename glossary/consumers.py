@@ -2,7 +2,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from notes.models import Certification
+from notes.models import Course
 from glossary.models import Term
 
 
@@ -11,11 +11,11 @@ async def custom_save_term_inline(text_data):
         text_data_json = json.loads(text_data)
         term = text_data_json["term"]
         definition = text_data_json["definition"]
-        cert_id = text_data_json["certification_id"]
-        certification = await database_sync_to_async(Certification.objects.get)(
+        cert_id = text_data_json["course_id"]
+        course = await database_sync_to_async(Course.objects.get)(
             id=cert_id
         )
-        term = Term(certification=certification, name=term, definition=definition)
+        term = Term(course=course, name=term, definition=definition)
         await database_sync_to_async(term.save)()
         return term
     except Exception as e:
@@ -35,13 +35,11 @@ class TermInlineConsumer(AsyncWebsocketConsumer):
         term = await custom_save_term_inline(text_data)
 
         try:
-            await self.channel_layer.group_send(
-                self.room_group_name,
+            await self.sendTermInline(
                 {
-                    "type": "sendTermInline",
                     "term": term.name,
                     "definition": term.definition,
-                },
+                }
             )
         except Exception as e:
             print(e)

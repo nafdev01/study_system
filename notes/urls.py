@@ -7,9 +7,9 @@ urlpatterns = [
     # detail views
     #
     path(
-        "certification/<int:id>/<slug:slug>/",
-        views.certification_detail,
-        name="certification_detail",
+        "course/<int:id>/<slug:slug>/",
+        views.course_detail,
+        name="course_detail",
     ),
     path("domain/<int:id>/<slug:slug>/", views.domain_detail, name="domain_detail"),
     path("entry/<int:id>/<slug:slug>/", views.entry_detail, name="entry_detail"),
@@ -17,10 +17,10 @@ urlpatterns = [
     # create views
     #
     path(
-        "certification/create/", views.create_certification, name="create_certification"
+        "course/create/", views.create_course, name="create_course"
     ),
     path(
-        "domain/create/<int:certification_id>",
+        "domain/create/<int:course_id>",
         views.create_domain,
         name="create_domain",
     ),
@@ -29,9 +29,9 @@ urlpatterns = [
     # update views
     #
     path(
-        "certification/update/<int:certification_id>",
-        views.update_certification,
-        name="update_certification",
+        "course/update/<int:course_id>",
+        views.update_course,
+        name="update_course",
     ),
     path("domain/update/<int:domain_id>", views.update_domain, name="update_domain"),
     path("entry/update/<int:entry_id>", views.update_entry, name="update_entry"),
@@ -39,9 +39,9 @@ urlpatterns = [
     # update views
     #
     path(
-        "certification/delete/<int:certification_id>/",
-        views.delete_certification,
-        name="delete_certification",
+        "course/delete/<int:course_id>/",
+        views.delete_course,
+        name="delete_course",
     ),
     path("domain/delete/<int:domain_id>/", views.delete_domain, name="delete_domain"),
     path("entry/delete/<int:entry_id>/", views.delete_entry, name="delete_entry"),

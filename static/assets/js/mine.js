@@ -3,7 +3,7 @@ function openDomain(domainCard) {
     window.location.href = url;
 }
 
-function openCertification(certificationCard) {
-    url = certificationCard.getAttribute("data-url");
+function openCourse(courseCard) {
+    url = courseCard.getAttribute("data-url");
     window.location.href = url;
 }

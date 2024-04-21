@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ certification.abbreviation }}{% endblock title %}
+{% block title %}{{ course.abbreviation }}{% endblock title %}
 
 {% block content %}
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -9,27 +9,27 @@
             <a href="{% url 'dashboard' %}">Home</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-            {{ certification }}
+            {{ course }}
         </li>
     </ol>
 </nav>
 
 <div class="container-fluid">
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-success" href="{% url 'create_domain' certification.id %}">
+        <a class="btn btn-success" href="{% url 'create_domain' course.id %}">
             <i class="ti ti-plus"></i>
             Add Domain
         </a>
     </div>
 
-    <p class="display-4 text-center text-dark mb-5">{{ certification }}</p>
+    <p class="display-4 text-center text-dark mb-5">{{ course }}</p>
 
     <div class="row">
         <div class="col-lg-8 col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        {% for domain in certification.domains.all %}
+                        {% for domain in course.domains.all %}
                         <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="card domain-card" onclick="openDomain(this)"
                                 data-url="{{ domain.get_absolute_url }}">
@@ -46,7 +46,7 @@
         <div class="col-lg-4 col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    {% for term in certification.terms.all %}
+                    {% for term in courseall %}
                     <button type="button" class="btn btn-sm btn-primary m-1 text-center" onclick="showDefinition(this)"
                         data-term="{{ term.name }}" data-definition="{{ term.definition }}">
                         {{ term.name }}

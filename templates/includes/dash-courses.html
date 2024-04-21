@@ -1,0 +1,16 @@
+<div class="row">
+    <h4 class="text-center display-4">Courses</h4>
+    {% for course in courses %}
+    <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="card course-card" onclick="openCourse(this)"
+            data-url="{{ course.get_absolute_url }}">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-2">
+                    {{ course.name }}
+                </h5>
+                <small class="mb-0">{{course.abbreviation}}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

@@ -56,14 +56,14 @@
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <div class="d-flex justify-content-between">
-                <span class="hide-menu">CERTIFICATIONS</span>
-                <a class="btn btn-sm btn-light" href="{% url 'create_certification' %}">
+                <span class="hide-menu">COURSES</span>
+                <a class="btn btn-sm btn-light" href="{% url 'create_course' %}">
                   <i class="ti ti-plus"></i>
                 </a>
               </div>
             </li>
 
-            {% nav_certs request.user %}
+            {% nav_courses request.user %}
 
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>

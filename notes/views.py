@@ -8,8 +8,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 from django.views.generic import TemplateView
 
-from notes.forms import CertificationForm, DomainForm, EntryForm
-from notes.models import Certification, Domain, Entry
+from notes.forms import CourseForm, DomainForm, EntryForm
+from notes.models import Course, Domain, Entry
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -17,72 +17,72 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
 
 @login_required
-def certification_detail(request, id, slug):
+def course_detail(request, id, slug):
     student = request.user
-    certification = get_object_or_404(
-        Certification, id=id, slug=slug, student_id=student.id
+    course = get_object_or_404(
+        Course, id=id, slug=slug, student_id=student.id
     )
-    domains = certification.domains.filter(
-        certification__student_id=student.id, certification_id=certification.id
+    domains = course.domains.filter(
+        course__student_id=student.id, course_id=course.id
     )
 
-    template_path = "notes/certification_detail.html"
+    template_path = "notes/course_detail.html"
     context = {
         "student": student,
-        "certification": certification,
+        "course": course,
         "domains": domains,
-        "section": certification.abbreviation,
+        "section": course.abbreviation,
     }
     return render(request, template_path, context)
 
 
 @login_required
-def create_certification(request):
+def create_course(request):
     student = request.user
     if request.method != "POST":
-        form = CertificationForm()
+        form = CourseForm()
     else:
-        form = CertificationForm(data=request.POST)
+        form = CourseForm(data=request.POST)
         if form.is_valid():
-            new_certification = form.save(commit=False)
-            new_certification.student = student
-            new_certification.save()
-            return redirect(new_certification)
+            new_course = form.save(commit=False)
+            new_course.student = student
+            new_course.save()
+            return redirect(new_course)
 
-    template_path = "notes/certification_create_form.html"
+    template_path = "notes/course_create_form.html"
     context = {"form": form}
     return render(request, template_path, context)
 
 
 @login_required
-def update_certification(request, certification_id):
-    certification = Certification.objects.get(id=certification_id)
+def update_course(request, course_id):
+    course = Course.objects.get(id=course_id)
     if request.method != "POST":
-        form = CertificationForm(instance=certification)
+        form = CourseForm(instance=course)
     else:
-        form = CertificationForm(instance=certification, data=request.POST)
+        form = CourseForm(instance=course, data=request.POST)
         if form.is_valid():
-            certification = form.save(commit=False)
-            certification.save()
-            return redirect(certification)
+            course = form.save(commit=False)
+            course.save()
+            return redirect(course)
 
-    template_path = "notes/certification_update_form.html"
-    context = {"form": form, "certification": certification}
+    template_path = "notes/course_update_form.html"
+    context = {"form": form, "course": course}
     return render(request, template_path, context)
 
 
 @login_required
-def delete_certification(request, certification_id):
+def delete_course(request, course_id):
     student = request.user
-    certification = Certification.objects.get(
-        id=certification_id, student_id=student.id
+    course = Course.objects.get(
+        id=course_id, student_id=student.id
     )
-    certification_name = certification.name
+    course_name = course.name
 
-    certification.delete()
+    course.delete()
     messages.success(
         request,
-        f"The certification {certification_name} has been deleted successfully.",
+        f"The course {course_name} has been deleted successfully.",
     )
 
     return redirect("dashboard")
@@ -97,7 +97,7 @@ domain views
 def domain_detail(request, id, slug):
     student = request.user
     domain = get_object_or_404(
-        Domain, id=id, slug=slug, certification__student_id=student.id
+        Domain, id=id, slug=slug, course__student_id=student.id
     )
 
     template_path = "notes/domain_detail.html"
@@ -109,10 +109,10 @@ def domain_detail(request, id, slug):
 
 
 @login_required
-def create_domain(request, certification_id):
+def create_domain(request, course_id):
     student = request.user
-    certification = get_object_or_404(
-        Certification, id=certification_id, student_id=student.id
+    course = get_object_or_404(
+        Course, id=course_id, student_id=student.id
     )
     if request.method != "POST":
         form = DomainForm()
@@ -121,14 +121,14 @@ def create_domain(request, certification_id):
         if form.is_valid():
             try:
                 new_domain = form.save(commit=False)
-                new_domain.certification = certification
+                new_domain.course = course
                 new_domain.save()
                 return redirect(new_domain)
             except IntegrityError as e:
                 if "duplicate key value violates unique constraint" in str(e):
                     messages.error(
                         request,
-                        f'A domain with that number already exists in this certification "{certification.abbreviation}".',
+                        f'A domain with that number already exists in this course "{course.abbreviation}".',
                     )
                 else:
                     messages.error(request, "There was an error creating the domain.")
@@ -157,16 +157,16 @@ def update_domain(request, domain_id):
 @login_required
 def delete_domain(request, domain_id):
     student = request.user
-    domain = Domain.objects.get(id=domain_id, certification__student_id=student.id)
+    domain = Domain.objects.get(id=domain_id, course__student_id=student.id)
     domain_name = domain.name
-    certification = domain.certification
+    course = domain.course
 
     domain.delete()
     messages.success(
         request, f"The domain {domain_name} has been deleted successfully."
     )
 
-    return redirect(certification)
+    return redirect(course)
 
 
 """
@@ -178,7 +178,7 @@ entry views
 def entry_detail(request, id, slug):
     student = request.user
     entry = get_object_or_404(
-        Entry, id=id, slug=slug, domain__certification__student_id=student.id
+        Entry, id=id, slug=slug, domain__course__student_id=student.id
     )
 
     template_path = "notes/entry_detail.html"
@@ -193,7 +193,7 @@ def entry_detail(request, id, slug):
 def create_entry(request, domain_id):
     student = request.user
     domain = get_object_or_404(
-        Domain, id=domain_id, certification__student_id=student.id
+        Domain, id=domain_id, course__student_id=student.id
     )
     if request.method != "POST":
         form = EntryForm()
@@ -239,7 +239,7 @@ def update_entry(request, entry_id):
 @login_required
 def delete_entry(request, entry_id):
     student = request.user
-    entry = Entry.objects.get(id=entry_id, domain__certification__student_id=student.id)
+    entry = Entry.objects.get(id=entry_id, domain__course__student_id=student.id)
     entry_name = entry.name
     domain = entry.domain
 
@@ -258,7 +258,7 @@ Additional views
 def entry_share(request, entry_id):
     student = request.user
     entry = get_object_or_404(
-        Entry, id=entry_id, domain__certification__student_id=student.id
+        Entry, id=entry_id, domain__course_t_id=student.id
     )
     entry_url = request.build_absolute_uri(entry.get_absolute_url())
     subject = f"{student.get_full_name()} has sent you notes on {entry.domain}"

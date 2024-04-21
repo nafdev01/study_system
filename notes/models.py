@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 class CommonModel(models.Model):
     """
-    Common abstract model for notes application certification, topic,subtopic, and entry.
+    Common abstract model for notes application course, topic,subtopic, and entry.
     """
 
     name = models.CharField(max_length=250)
@@ -38,16 +38,16 @@ class CommonModel(models.Model):
         abstract = True
 
 
-class Certification(CommonModel):
+class Course(CommonModel):
     """
-    Model for certifications
+    Model for courses
     """
 
     student = models.ForeignKey(
         "accounts.Student",
         on_delete=models.CASCADE,
         null=True,
-        related_name="certifications",
+        related_name="courses",
     )
     abbreviation = models.CharField(max_length=250, default="CODE")
     about = models.TextField()
@@ -55,24 +55,24 @@ class Certification(CommonModel):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         self.abbreviation = self.abbreviation.upper()
-        super(Certification, self).save(*args, **kwargs)
+        super(Course, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} ({self.abbreviation})"
 
     class Meta:
-        verbose_name = "Certification"
-        verbose_name_plural = "Certifications"
+        verbose_name = "Course"
+        verbose_name_plural = "Courses"
         ordering = ["abbreviation"]
 
 
 class Domain(CommonModel):
     """
-    model for certification topic
+    model for course topic
     """
 
-    certification = models.ForeignKey(
-        Certification,
+    course = models.ForeignKey(
+        Course,
         on_delete=models.CASCADE,
         null=True,
         related_name="domains",
@@ -80,13 +80,13 @@ class Domain(CommonModel):
     number = models.PositiveIntegerField(null=True)
 
     def __str__(self):
-        return f"{self.number}. {self.name} in {self.certification.abbreviation}"
+        return f"{self.number}. {self.name} in {self.course.abbreviation}"
 
     class Meta:
         verbose_name = "Domain"
         verbose_name_plural = "Domains"
-        ordering = ["certification", "number"]
-        unique_together = ["certification", "number"]
+        ordering = ["course", "number"]
+        unique_together = ["course", "number"]
 
 
 class Entry(CommonModel):

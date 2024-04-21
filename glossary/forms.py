@@ -2,17 +2,17 @@
 from django.utils.translation import gettext_lazy as _
 from django import forms
 from glossary.models import Term
-from notes.models import Certification
+from notes.models import Course
 
 
 class TermForm(forms.ModelForm):
     def __init__(self, student, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["certification"].queryset = Certification.objects.filter(student=student)
+        self.fields["course"].queryset = Course.objects.filter(student=student)
 
     class Meta:
         model = Term
-        fields = ["certification", "name", "definition"]
+        fields = ["course", "name", "definition"]
 
 
 class TermInlineForm(forms.ModelForm):
