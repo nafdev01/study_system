@@ -3,7 +3,7 @@ from django.urls import path
 from notes import views
 
 urlpatterns = [
-    path("", views.dashboard, name="dashboard"),
+    path("dashboard/", views.dashboard, name="dashboard"),
     #
     # detail views
     #

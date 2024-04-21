@@ -138,17 +138,10 @@ def logout_student(request):
     return redirect("login")
 
 
-def handler404(request, *args, **argv):
-    response = render(
-        "404.html", {}, context_instance=RequestContext(request)
-    )
-    response.status_code = 404
-    return response
+# custom 404 view
+def custom_404(request, exception):
+    return render(request, "404.html", status=404)
 
 
-def handler500(request, *args, **argv):
-    response = render(
-        "500.html", {}, context_instance=RequestContext(request)
-    )
-    response.status_code = 500
-    return response
+def custom_500(request):
+    return render(request, "500.html", status=500)

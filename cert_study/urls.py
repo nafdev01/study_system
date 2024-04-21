@@ -26,8 +26,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("accounts.urls")),
     path("", include("notes.urls")),
-    path("", include("glossary.urls")),
-    path("", include("planner.urls")),
+    path("glossary/", include("glossary.urls")),
+    path("planner", include("planner.urls")),
 ]
 
 
@@ -38,4 +38,5 @@ if settings.DEBUG:
     )
 
 
-handler404 = "accounts.views.handler404"
+handler404 = "accounts.views.custom_404"
+handler500 = "accounts.views.custom_500"
