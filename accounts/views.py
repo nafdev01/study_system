@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import *
 from notes.models import *
 from accounts.forms import *
+from django.template import RequestContext
 
 
 def login(request):
@@ -135,3 +136,19 @@ def logout_student(request):
     logout(request)
     messages.success(request, f"Yo have successfully logged out")
     return redirect("login")
+
+
+def handler404(request, *args, **argv):
+    response = render(
+        "404.html", {}, context_instance=RequestContext(request)
+    )
+    response.status_code = 404
+    return response
+
+
+def handler500(request, *args, **argv):
+    response = render(
+        "500.html", {}, context_instance=RequestContext(request)
+    )
+    response.status_code = 500
+    return response

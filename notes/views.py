@@ -6,25 +6,21 @@ from django.core.mail import EmailMessage
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
-from django.views.generic import TemplateView
 
 from notes.forms import CourseForm, DomainForm, EntryForm
 from notes.models import Course, Domain, Entry
 
 
-class DashboardView(LoginRequiredMixin, TemplateView):
-    template_name = "dashboard.html"
+@login_required
+def dashboard(request):
+    return render(request, "dashboard.html")
 
 
 @login_required
 def course_detail(request, id, slug):
     student = request.user
-    course = get_object_or_404(
-        Course, id=id, slug=slug, student_id=student.id
-    )
-    domains = course.domains.filter(
-        course__student_id=student.id, course_id=course.id
-    )
+    course = get_object_or_404(Course, id=id, slug=slug, student_id=student.id)
+    domains = course.domains.filter(course__student_id=student.id, course_id=course.id)
 
     template_path = "notes/course_detail.html"
     context = {
@@ -74,9 +70,7 @@ def update_course(request, course_id):
 @login_required
 def delete_course(request, course_id):
     student = request.user
-    course = Course.objects.get(
-        id=course_id, student_id=student.id
-    )
+    course = Course.objects.get(id=course_id, student_id=student.id)
     course_name = course.name
 
     course.delete()
@@ -96,9 +90,7 @@ domain views
 @login_required
 def domain_detail(request, id, slug):
     student = request.user
-    domain = get_object_or_404(
-        Domain, id=id, slug=slug, course__student_id=student.id
-    )
+    domain = get_object_or_404(Domain, id=id, slug=slug, course__student_id=student.id)
 
     template_path = "notes/domain_detail.html"
     context = {
@@ -111,9 +103,7 @@ def domain_detail(request, id, slug):
 @login_required
 def create_domain(request, course_id):
     student = request.user
-    course = get_object_or_404(
-        Course, id=course_id, student_id=student.id
-    )
+    course = get_object_or_404(Course, id=course_id, student_id=student.id)
     if request.method != "POST":
         form = DomainForm()
     else:
@@ -192,9 +182,7 @@ def entry_detail(request, id, slug):
 @login_required
 def create_entry(request, domain_id):
     student = request.user
-    domain = get_object_or_404(
-        Domain, id=domain_id, course__student_id=student.id
-    )
+    domain = get_object_or_404(Domain, id=domain_id, course__student_id=student.id)
     if request.method != "POST":
         form = EntryForm()
     else:
@@ -257,9 +245,7 @@ Additional views
 # send entry by email
 def entry_share(request, entry_id):
     student = request.user
-    entry = get_object_or_404(
-        Entry, id=entry_id, domain__course_t_id=student.id
-    )
+    entry = get_object_or_404(Entry, id=entry_id, domain__course_t_id=student.id)
     entry_url = request.build_absolute_uri(entry.get_absolute_url())
     subject = f"{student.get_full_name()} has sent you notes on {entry.domain}"
     sender = settings.EMAIL_HOST_USER

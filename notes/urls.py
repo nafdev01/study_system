@@ -3,6 +3,7 @@ from django.urls import path
 from notes import views
 
 urlpatterns = [
+    path("", views.dashboard, name="dashboard"),
     #
     # detail views
     #
@@ -16,9 +17,7 @@ urlpatterns = [
     #
     # create views
     #
-    path(
-        "course/create/", views.create_course, name="create_course"
-    ),
+    path("course/create/", views.create_course, name="create_course"),
     path(
         "domain/create/<int:course_id>",
         views.create_domain,

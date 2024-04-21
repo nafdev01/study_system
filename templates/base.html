@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}CERT STUDY{% endblock title %}
   </title>
-  <link rel="shortcut icon" type="image/png" href="{% static 'assets/images/logos/favicon.ico' %}" />
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
   <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}" />
   <link rel="stylesheet" href="{% static 'assets/css/mine.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/easymde.min.css' %}">
@@ -119,7 +119,8 @@
                   <img src="{{ request.user.profile.photo.url }}" alt="..." width="35" height="35"
                     class="rounded-circle">
                   {% else %}
-                  <img src="{% static 'assets/images/no-photo-icon.png' %}" alt=".." width="35" height="35" class="rounded-circle">
+                  <img src="{% static 'assets/images/no-photo-icon.png' %}" alt=".." width="35" height="35"
+                    class="rounded-circle">
                   {% endif %}
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
