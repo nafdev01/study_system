@@ -27,7 +27,7 @@ urlpatterns = [
     path("", include("accounts.urls")),
     path("", include("notes.urls")),
     path("glossary/", include("glossary.urls")),
-    path("planner", include("planner.urls")),
+    path("planner/", include("planner.urls")),
 ]
 
 
