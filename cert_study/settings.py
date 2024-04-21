@@ -178,11 +178,10 @@ LOGIN_URL = "login"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.ngrok-free.app",
     "https://*naftalmatoya.me",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://0.0.0.0:8000",
+    "http://localhost:8001",
+    "http://127.0.0.1:8001",
+    "http://0.0.0.0:8001",
 ]
 
 # EMAIL SETTINGS
