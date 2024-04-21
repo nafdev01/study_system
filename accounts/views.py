@@ -140,8 +140,14 @@ def logout_student(request):
 
 # custom 404 view
 def custom_404(request, exception):
-    return render(request, "404.html", status=404)
+    if request.user.is_authenticated:
+        return render(request, "404.html", status=404)
+    else:
+        return render(request, "no-auth-404.html", status=404)
 
 
 def custom_500(request):
-    return render(request, "500.html", status=500)
+    if request.user.is_authenticated:
+        return render(request, "500.html", status=500)
+    else:
+        return render(request, "no-auth-500.html", status=500)
