@@ -6,7 +6,7 @@
 {% block header %}
 <div class="d-flex justify-content-center">
 	<a href="#" class="text-nowrap logo-img text-center d-block py-3">
-		<img class="rounded-circle" src="{% static 'assets/images/logos/favicon.ico' %}" width="80" alt="">
+		<img class="rounded-circle" src="{% static 'assets/images/logos/thumbnail-logo.png' %}" width="80" alt="">
 	</a>
 </div>
 <p class="text-center">Log in to access your notes</p>
@@ -27,7 +27,7 @@
 		<div class="form-check">
 			<input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked>
 			<label class="form-check-label text-dark" for="flexCheckChecked">
-				Remeber this Device
+				Remember this Device
 			</label>
 		</div>
 		<a class="text-primary fw-bold" href="{% url 'password_reset' %}">Forgot
