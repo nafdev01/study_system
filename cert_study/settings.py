@@ -142,11 +142,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Africa/Nairobi"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -178,7 +178,6 @@ LOGIN_REDIRECT_URL = "profile"
 LOGOUT_REDIRECT_URL = "home"
 LOGIN_URL = "login"
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.naftalmatoya.me",
@@ -227,3 +226,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }
+
+
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
