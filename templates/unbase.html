@@ -13,6 +13,64 @@
 </head>
 
 <body>
+
+
+    {% if user.is_authenticated %}
+    <div class="p-2">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-start">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="{% url 'dashboard' %}" class="nav-link px-2 link-body-emphasis">Dashboard</a></li>
+                </ul>
+
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if request.user.profile.photo %}
+                        <img src="{{ request.user.profile.photo.url }}" alt="..." width="35" height="35"
+                            class="rounded-circle">
+                        {% else %}
+                        <img src="{% static 'assets/images/no-photo-icon.png' %}" alt=".." width="35" height="35"
+                            class="rounded-circle">
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li> <a href="{% url 'profile' %}" class="d-flex align-items-center gap-2 dropdown-item">
+                                <i class="ti ti-user fs-6"></i>
+                                <p class="mb-0 fs-3">My Profile</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                <i class="ti ti-mail fs-6"></i>
+                                <p class="mb-0 fs-3">My Account</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                <i class="ti ti-list-check fs-6"></i>
+                                <p class="mb-0 fs-3">My Task</p>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <button class="btn btn-outline-primary mx-3 mt-2 d-block" data-bs-toggle="modal"
+                                data-bs-target="#logoutModal">
+                                Logout
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/logout-modal.html' %}
+
+    {% endif %}
+
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
@@ -21,7 +79,7 @@
             <div class="d-flex align-items-center justify-content-center w-100">
                 <div class="row justify-content-center w-100">
                     <div class="col-md-8 col-lg-6 col-xxl-3">
-                        <div class="card mb-0">
+                        <div class="card mb-0 mt-3">
                             <div class="card-body">
                                 {% if messages %}
                                 {% for message in messages %}
