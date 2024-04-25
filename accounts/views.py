@@ -50,6 +50,10 @@ def login(request):
 
 
 def register(request):
+    if request.user.is_authenticated:
+        messages.warning(request, "You are already logged in.")
+        return redirect("dashboard")
+
     if request.method != "POST":
         student_form = StudentRegistrationForm()
     else:
