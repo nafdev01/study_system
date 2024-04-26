@@ -1,7 +1,10 @@
 # consumers.py
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+
 from channels.db import database_sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+from accounts.models import Student
 from notes.models import Course
 from planner.models import MyEvent
 
@@ -10,9 +13,11 @@ async def custom_save_my_event(text_data):
     try:
         name = text_data["name"]
         start_time = text_data["start_time"]
+        student_id = text_data["student_id"]
+        student = await database_sync_to_async(Student.objects.get)(id=student_id)
         my_event, _created = await database_sync_to_async(
             MyEvent.objects.update_or_create
-        )(name=name, defaults={"start_time": start_time})
+        )(student=student, name=name, defaults={"start_time": start_time})
         return my_event
     except Exception as e:
         print(f"Error: {e}")

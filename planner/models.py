@@ -9,7 +9,9 @@ from planner.tasks import send_email_task
 
 
 class MyEvent(models.Model):
-    """Model definition for MyEvent."""
+    """
+    Model definition for a planned event. Has fields for the name of the event, the start time, and the student who created the event, and the category of the event.
+    """
 
     # choices for reasons for a ban
 

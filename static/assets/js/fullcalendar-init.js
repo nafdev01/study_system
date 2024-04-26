@@ -15,7 +15,7 @@ function dateTimeToFormattedString(dateTimeString) {
     return dateTimeString.toLocaleDateString('en-US', options);
 }
 
-function addMyEvent(arg, calendar, eventSocket) {
+function addMyEvent(student_id, arg, eventSocket) {
     silverBox({
         alertIcon: "warning",
         title: {
@@ -32,7 +32,7 @@ function addMyEvent(arg, calendar, eventSocket) {
                 const start_time = document.querySelector("#id-start-time-input").value;
 
 
-                eventSocket.send(JSON.stringify({ "name": name, "start_time": start_time, "ssup": "creating" }));
+                eventSocket.send(JSON.stringify({ "name": name, "start_time": start_time, "student_id": student_id, "ssup": "creating" }));
             }
         },
         cancelButton: {
@@ -57,6 +57,10 @@ function addMyEvent(arg, calendar, eventSocket) {
     })
 }
 
+function updateMyEvent(student_id, originalEvent, newEvent, eventSocket) {
+    eventSocket.send(JSON.stringify({ "id": originalEvent.id, "name": originalEvent.title, "start_time": newEvent.start, "student_id": student_id, "ssup": "updating" }));
+}
+
 function deleteMyEvent(arg, calendar, EventSocket) {
     silverBox({
         alertIcon: "danger",
@@ -79,9 +83,6 @@ function deleteMyEvent(arg, calendar, EventSocket) {
     })
 }
 
-function updateMyEvent(originalEvent, newEvent, eventSocket) {
-    eventSocket.send(JSON.stringify({ "id": originalEvent.id, "name": originalEvent.title, "start_time": newEvent.start, "ssup": "updating" }));
-}
 
 function addedMyEvent(calendar, data) {
     console.log(data);

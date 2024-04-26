@@ -136,6 +136,7 @@
 {% block custom_js %}
 <script>
     var calendar = null;
+    var student_id = '{{ request.user.id }}';
 
     var loc = window.location;
     if (loc.protocol == 'https:') {
@@ -207,12 +208,12 @@
                 deleteMyEvent(arg, calendar, myEventSocket)
             },
             select: function (arg) {
-                addMyEvent(arg, calendar, myEventSocket)
+                addMyEvent(student_id, arg, myEventSocket)
                 calendar.unselect()
 
             },
             eventDrop: function (info) {
-                updateMyEvent(info.oldEvent, info.event, myEventSocket);
+                updateMyEvent(student_id, info.oldEvent, info.event, myEventSocket);
 
             },
             events: djangoJsonToArray('{{ myevents_json| safe}}'),
