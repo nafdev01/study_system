@@ -19697,6 +19697,10 @@ fieldset:disabled .btn {
 .nav-small-cap .nav-small-cap-icon {
     display: none
 }
+.sidebar-nav ul {
+    list-style: none;
+    padding-left: 0%;
+}
 
 .sidebar-nav ul .sidebar-item .sidebar-link {
     color: #2A3547;
@@ -20065,10 +20069,6 @@ a:hover {
     color: #5D87FF
 }
 
-ul {
-    list-style: none;
-    padding-left: 0
-}
 
 :focus {
     outline: 0;
