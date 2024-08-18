@@ -23,3 +23,7 @@ class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
         fields = ["name", "content"]
+
+
+class SearchForm(forms.Form):
+    q = forms.CharField()

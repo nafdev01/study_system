@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load notes_tags %}
+
+{% block title %}Search{% endblock %}
+{% block content %}
+<section class="container-fluid p-2">
+    {% if query %}
+    <div class="mb-5">
+        <p class="display-4 text-dark text-center">Entries containing "{{ query }}"</p>
+    </div>
+
+    <div class="row row-cols-2 mt-2">
+        {% for entry in entries %}
+        <div class="col border-dark link dark border-2">
+            <a class="card course-card link-dark p-2" href="{{ entry.get_absolute_url }}">
+                <small class="text-muted text-center mb-2">{{entry.domain.course}} &rightsquigarrow; {{entry.domain}}</small>
+                <h3 class="card-title fw-semibold mb-2">
+                    {{ entry.name }}
+                </h3>
+                <p>{{ entry.content|markdown|truncatewords_html:12 }}</p>
+            </a>
+        </div>
+        {% empty %}
+        <p>There are no entries for your query.</p>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h1>Search for Entries</h1>
+    <form method="get">
+        {{ form.as_p }}
+        <input class="form-control" type="submit" value="Search">
+    </form>
+    {% endif %}
+</section>
+{% endblock %}

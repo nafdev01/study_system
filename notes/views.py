@@ -2,12 +2,13 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.postgres.search import SearchVector
 from django.core.mail import EmailMessage
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 
-from notes.forms import CourseForm, DomainForm, EntryForm
+from notes.forms import CourseForm, DomainForm, EntryForm, SearchForm
 from notes.models import Course, Domain, Entry
 
 
@@ -244,6 +245,26 @@ def delete_entry(request, entry_id):
 """
 Additional views
 """
+
+
+def notes_search(request):
+    form = SearchForm()
+    query = None
+    entries = []
+
+    if "q" in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data["q"]
+            entries = Entry.objects.annotate(
+                search=SearchVector("name", "content"),
+            ).filter(search=query)
+
+    return render(
+        request,
+        "notes/search.html",
+        {"form": form, "query": query, "entries": entries},
+    )
 
 
 # send entry by email

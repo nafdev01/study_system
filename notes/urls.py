@@ -48,5 +48,6 @@ urlpatterns = [
     #
     # additional urls
     #
+    path("search/", views.notes_search, name="notes_search"),
     path("entry/share/<int:entry_id>/", views.entry_share, name="entry_share"),
 ]
