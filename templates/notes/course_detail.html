@@ -16,6 +16,12 @@
 
 <div class="container-fluid">
     <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-sm btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#termInlineModal">
+            <i class="ti ti-plus fs-5"></i>
+            <span>Add Term </span>
+            <i class="ti ti-vocabulary fs-5"></i>
+        </button>
+
         <a class="btn btn-success" href="{% url 'create_domain' course.id %}">
             <i class="ti ti-plus"></i>
             Add Domain
@@ -46,7 +52,7 @@
         <div class="col-lg-4 col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    {% for term in courseall %}
+                    {% for term in terms %}
                     <button type="button" class="btn btn-sm btn-primary m-1 text-center" onclick="showDefinition(this)"
                         data-term="{{ term.name }}" data-definition="{{ term.definition }}">
                         {{ term.name }}
@@ -57,6 +63,8 @@
         </div>
     </div>
 </div>
+{% include 'includes/create_term_inline.html' with entry=entry %}
+
 {% endblock content %}
 
 {% block custom_js %}
@@ -81,5 +89,54 @@
         })
     }
 
+</script>
+<script>
+    var courseId = "{{ course.id }}";
+
+    var loc = window.location;
+    if (loc.protocol == 'https:') {
+        var wsStart = 'wss://'
+    }
+    else {
+        var wsStart = 'ws://';
+    }
+
+    var termInlineAddress = `${wsStart}${window.location.host}/ws/term/inline/create/${courseId}/`;
+    const termInlineSocket = new WebSocket(termInlineAddress);
+    termInlineSocket.onopen = function (e) {
+        console.log(`The connection was setup successfully to "${termInlineAddress}!`);
+    };
+    termInlineSocket.onclose = function (e) {
+        console.log(`something unexpected happened when connecting to "${termInlineAddress}/" !`);
+        console.log(`Error: ${e}`);
+    };
+
+    document.querySelector("#create-term-inline-btn").onclick = function (e) {
+        var term = document.querySelector(
+            "#term-inline-input"
+        ).value;
+        definition = document.querySelector(
+            "#definition-inline-input"
+        ).value;
+
+        termInlineSocket.send(JSON.stringify({ term: term, definition: definition, course_id: courseId }));
+    };
+    termInlineSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+        document.querySelector("#term-inline-input").value = "";
+        document.querySelector("#definition-inline-input").value = "";
+
+        silverBox({
+            alertIcon: "success",
+            position: "top-right",
+            text: `You have successfully created the term ${data.term}`,
+            centerContent: true,
+            cancelButton: {
+                text: "OK"
+            }
+        })
+
+    };
 </script>
 {% endblock custom_js %}

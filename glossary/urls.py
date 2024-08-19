@@ -4,6 +4,10 @@ from glossary import views
 
 urlpatterns = [
     #
+    # list views
+    #
+    path('glossary/', views.term_list, name='term_list'),
+    #
     # create views
     #
     path("term/create/", views.create_term, name="create_term"),

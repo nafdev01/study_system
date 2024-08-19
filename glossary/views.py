@@ -12,6 +12,15 @@ from glossary.forms import TermForm, TermInlineForm
 create views
 """
 
+@login_required
+def term_list(request):
+    student = request.user
+    terms = Term.objects.filter(course__student=student)
+
+    template_path = "glossary/term_list.html"
+    context = {"terms": terms}
+    return render(request, template_path, context)
+
 
 @login_required
 def create_term(request):

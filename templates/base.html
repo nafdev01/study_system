@@ -56,6 +56,21 @@
             </li>
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <div class="d-flex justify-content-start">
+                <span class="hide-menu">Glossary</span>
+              </div>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link {% if request.path == 'glossary' %} active{% endif %}" href="{% url 'term_list' %}"
+                aria-expanded="false">
+                <span><i class="ti ti-books"></i></span>
+                <span class="hide-menu">Terms & Definitions</span>
+              </a>
+            </li>
+
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <div class="d-flex justify-content-between">
                 <span class="hide-menu">COURSES</span>
                 <a class="btn btn-sm btn-light" href="{% url 'create_course' %}">

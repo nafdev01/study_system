@@ -107,3 +107,19 @@ class Entry(CommonModel):
         verbose_name_plural = "Entries"
         ordering = ["updated", "name"]
         unique_together = ["name", "domain"]
+
+
+class EntryImage(CommonModel):
+    """
+    model for entry images
+    """
+    name = models.CharField(max_length=250)
+    image = models.ImageField(upload_to="entry_images")
+
+    def __str__(self):
+        return f"{self.name} image"
+
+    class Meta:
+        verbose_name = "Entry Image"
+        verbose_name_plural = "Entry Images"
+        ordering = ["updated"]

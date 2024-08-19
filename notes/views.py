@@ -26,6 +26,7 @@ def course_detail(request, id, slug):
     student = request.user
     course = get_object_or_404(Course, id=id, slug=slug, student_id=student.id)
     domains = course.domains.filter(course__student_id=student.id, course_id=course.id)
+    terms = course.terms.all()
 
     template_path = "notes/course_detail.html"
     context = {
@@ -33,6 +34,7 @@ def course_detail(request, id, slug):
         "course": course,
         "domains": domains,
         "section": course.abbreviation,
+        "terms": terms,
     }
     return render(request, template_path, context)
 
