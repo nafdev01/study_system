@@ -15,15 +15,15 @@
 </nav>
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-sm btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#termInlineModal">
-            <i class="ti ti-plus fs-5"></i>
-            <span>Add Term </span>
+    <div class="d-flex justify-content-between mb-3">
+        <button class="btn btn-sm btn-primary mx-2 d-flex flex-row justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#termInlineModal">
+            <i class="ti ti-circle-plus fs-5"></i>
+            <span class="mx-1">Add Term </span>
             <i class="ti ti-vocabulary fs-5"></i>
         </button>
 
         <a class="btn btn-success" href="{% url 'create_domain' course.id %}">
-            <i class="ti ti-plus"></i>
+            <i class="ti ti-plus fs-5"></i>
             Add Domain
         </a>
     </div>

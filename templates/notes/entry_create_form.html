@@ -28,7 +28,20 @@
 </div>
 
 <script>
-	const easyMDE = new EasyMDE({ element: document.getElementById('id_content') });
+	const easyMDE = new EasyMDE({
+		element: document.getElementById('id_content'),
+		toolbar: [
+			"heading-smaller", "heading-bigger", "|",
+			"bold", "italic", "strikethrough", "|",
+			"code", "|",
+			"unordered-list", "ordered-list", "|",
+			"link", "image", "horizontal-rule", "|",
+			"preview", "side-by-side", "fullscreen", "|",
+			"undo", "redo", "|",
+		],
+		status: ["autosave", "lines", "words", "cursor", ]
+	});
+
 
 	function createEntry(event) {
 		event.preventDefault();

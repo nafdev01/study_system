@@ -20,14 +20,27 @@
 				<label for="id_content" class="form-label">Content</label>
 				<textarea id="id_content" name="content">{{entry.content}}</textarea>
 			</div>
-			<button class="btn btn-outline-success" type="submit">Save Changes</button>
+			<button class="btn btn-outline-success" type="submit" accesskey="s">Save Changes</button>
 		</form>
 	</div>
 
 </div>
 
 <script>
-	const easyMDE = new EasyMDE({ element: document.getElementById('id_content') });
+	const easyMDE = new EasyMDE({
+		element: document.getElementById('id_content'),
+		toolbar: [
+			"heading-smaller", "heading-bigger", "|",
+			"bold", "italic", "strikethrough", "|",
+			"code", "|",
+			"unordered-list", "ordered-list", "|",
+			"link", "image", "horizontal-rule", "|",
+			"preview", "side-by-side", "fullscreen", "|",
+			"undo", "redo", "|",
+		],
+		status: ["autosave", "lines", "words", "cursor",]
+	});
+
 	easyMDE.value();
 
 	function updateEntry(event) {

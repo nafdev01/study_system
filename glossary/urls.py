@@ -6,7 +6,7 @@ urlpatterns = [
     #
     # list views
     #
-    path('glossary/', views.term_list, name='term_list'),
+    path('', views.term_list, name='term_list'),
     #
     # create views
     #
