@@ -77,7 +77,6 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1
 click-repl==0.3.0
 cmd2==2.4.3+ds
-cockpit @ file:///build/reproducible-path/cockpit-321/tmp/wheel/cockpit-321-py3-none-any.whl#sha256=0c5f12cabdc4762b32891ae33983163d88dec1630cf98ca5e0596228248864dd
 codext==1.15.4
 colorama==0.4.6
 coloredlogs==15.0.1
