@@ -2,94 +2,273 @@
 
 {% block title %}{{ domain.name }}{% endblock title %}
 
-
 {% block custom_css %}
 <style>
-    input {
-        display: inline;
-        width: 100%;
-        padding: 6px 16px;
-        font-size: 0.8rem;
+    /* DataTable custom styling */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 1.5rem;
+    }
+    
+    .dataTables_wrapper .dataTables_filter input {
+        display: inline-block;
+        width: auto;
+        padding: 8px 16px;
+        font-size: 0.9rem;
         font-weight: 400;
         line-height: 1.5;
         color: #5A6A85;
-        background-color: transparent;
+        background-color: #fff;
         background-clip: padding-box;
         border: var(--bs-border-width) solid #DFE5EF;
         border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+    }
+    
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+        outline: 0;
+    }
+    
+    table.dataTable {
+        border-collapse: separate !important;
+        border-spacing: 0;
+        width: 100% !important;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    table.dataTable thead th {
+        background-color: rgba(var(--bs-primary-rgb), 0.08);
+        padding: 15px 18px;
+        border-bottom: 2px solid rgba(var(--bs-primary-rgb), 0.2);
+        font-weight: 600;
+        color: var(--bs-primary);
+    }
+    
+    table.dataTable tbody tr {
+        background-color: #fff;
+        transition: all 0.2s ease;
+    }
+    
+    table.dataTable tbody tr:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.04);
+    }
+    
+    table.dataTable tbody td {
+        padding: 12px 18px;
+        border-bottom: 1px solid #f0f0f0;
+        vertical-align: middle;
+    }
+    
+    table.dataTable tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: var(--bs-primary);
+        border-color: var(--bs-primary);
+    }
+    
+    .pagination .page-link {
+        color: var(--bs-primary);
+    }
+    
+    /* Entry link styling */
+    .entry-link {
+        text-decoration: none;
+        color: #2c3e50;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .entry-link:hover {
+        color: var(--bs-primary);
+        transform: translateX(3px);
+    }
+    
+    .entry-link:hover .entry-icon {
+        opacity: 1;
+    }
+    
+    .entry-icon {
+        opacity: 0;
+        margin-left: 5px;
+        transition: all 0.2s ease;
+    }
+    
+    /* Domain header styling */
+    .domain-header {
+        background: linear-gradient(to right, rgba(var(--bs-primary-rgb), 0.08), rgba(var(--bs-primary-rgb), 0.03));
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-left: 5px solid var(--bs-primary);
+    }
+    
+    .domain-number {
+        background-color: var(--bs-primary);
+        color: white;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-right: 1rem;
+    }
+    
+    /* Animation utilities */
+    .hover-lift {
+        transition: transform 0.2s ease;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-3px);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .domain-header {
+            padding: 1.5rem;
+        }
+        
+        .domain-number {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+        
+        table.dataTable tbody td,
+        table.dataTable thead th {
+            padding: 10px 12px;
+        }
     }
 </style>
 {% endblock custom_css %}
 
-
 {% block content %}
-<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb">
+<!-- Enhanced breadcrumb navigation -->
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-4 px-3 py-2 bg-light rounded-3">
+    <ol class="breadcrumb mb-0 py-1">
         <li class="breadcrumb-item">
-            <a href="{% url 'dashboard' %}">Home</a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href="{{ domain.course.get_absolute_url }}">
-                {{ domain.course }}
+            <a href="{% url 'dashboard' %}" class="text-decoration-none">
+                <i class="ti ti-home"></i> Home
             </a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            {{ domain.name }}
+        <li class="breadcrumb-item">
+            <a href="{{ domain.course.get_absolute_url }}" class="text-decoration-none">
+                <i class="ti ti-books"></i> {{ domain.course }}
+            </a>
+        </li>
+        <li class="breadcrumb-item active fw-semibold" aria-current="page">
+            <i class="ti ti-category"></i> {{ domain.name }}
         </li>
     </ol>
 </nav>
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-success" href="{% url 'create_entry' domain.id %}">
-            <i class="ti ti-plus"></i>
-            Add Entry
-        </a>
+    <!-- Domain header with metadata -->
+    <div class="domain-header shadow-sm">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div class="d-flex align-items-center mb-3 mb-md-0">
+                <div class="domain-number shadow-sm">
+                    {{domain.number}}
+                </div>
+                <div>
+                    <h1 class="h2 mb-1 fw-bold text-primary">{{domain.name}}</h1>
+                    <p class="text-muted mb-0">Part of <span class="fw-medium">{{ domain.course }}</span></p>
+                </div>
+            </div>
+            <a class="btn btn-primary hover-lift shadow-sm d-flex align-items-center" href="{% url 'create_entry' domain.id %}">
+                <i class="ti ti-plus me-2"></i>
+                Add Entry
+            </a>
+        </div>
     </div>
 
-    <div class="card">
+    <!-- Main content card -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom border-light py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="ti ti-list me-2 text-primary"></i>
+                    Domain Entries
+                </h5>
+                <span class="badge bg-primary rounded-pill">{{ domain.entries.all|length }} Entries</span>
+            </div>
+        </div>
         <div class="card-body">
-            <p class="display-5 text-center text-dark">{{ domain }}</p>
-
-            <div class="row">
-                <div class="col-12">
-                    <h5 class="text-center">Domain&nbsp;{{domain.number}}.&nbsp;{{domain.name }}</h5>
-                    <table id="myTable">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <h5 class="fw-semibold mb-0">Name</h5>
-                                </th>
-                                <th>
-                                    <h5 class="fw-semibold mb-0 ">Updated On</h5>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for entry in domain.entries.all %}
-                            <tr class="">
-                                <td class="">
-                                    <h6 class="fw-semibold mb-0">
-                                        <a class="link-dark" href="{{entry.get_absolute_url}}">{{entry.name}}</a>
-                                    </h6>
-                                </td>
-                                <td class="">
-                                    <span class="fw-normal">{{entry.updated}}</span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-responsive">
+                <table id="myTable" class="table display nowrap">
+                    <thead>
+                        <tr>
+                            <th>
+                                <h6 class="mb-0">Entry Name</h6>
+                            </th>
+                            <th>
+                                <h6 class="mb-0">Last Updated</h6>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in domain.entries.all %}
+                        <tr>
+                            <td>
+                                <a class="entry-link" href="{{entry.get_absolute_url}}">
+                                    {{entry.name}}
+                                    <i class="ti ti-chevron-right entry-icon"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <span class="text-muted">
+                                    <i class="ti ti-calendar-event me-1 opacity-75"></i>
+                                    {{entry.updated|date:"M d, Y"}}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
+{% endblock content %}
+
+{% block custom_js %}
 <script>
-    $('#myTable').DataTable({
-        dom: 'Bfrtip',
-        pageLength: 10,
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            dom: '<"top"lf>rt<"bottom"ip>',
+            pageLength: 10,
+            responsive: true,
+            language: {
+                search: "<i class='ti ti-search me-2'></i>Search:",
+                lengthMenu: "Show _MENU_ entries",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                paginate: {
+                    first: "<i class='ti ti-chevrons-left'></i>",
+                    previous: "<i class='ti ti-chevron-left'></i>",
+                    next: "<i class='ti ti-chevron-right'></i>",
+                    last: "<i class='ti ti-chevrons-right'></i>"
+                }
+            },
+            columnDefs: [
+                { orderable: true, targets: 0 },
+                { orderable: true, targets: 1 }
+            ]
+        });
     });
 </script>
-{% endblock content %}
+{% endblock custom_js %}

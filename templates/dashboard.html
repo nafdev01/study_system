@@ -3,8 +3,73 @@
 
 {% block title %}Dashboard{% endblock title %}
 
+{% block custom_css %}
+<style>
+    .dashboard-container {
+        padding: 2rem 0;
+    }
+    
+    .dashboard-header {
+        margin-bottom: 2.5rem;
+    }
+    
+    .dashboard-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .dashboard-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    
+    .welcome-banner {
+        background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.08), rgba(var(--bs-primary-rgb), 0.02));
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        border-left: 5px solid var(--bs-primary);
+    }
+    
+    .welcome-title {
+        font-weight: 600;
+        color: var(--bs-primary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .date-display {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 1rem;
+    }
+</style>
+{% endblock custom_css %}
+
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid dashboard-container">
+    <!-- Welcome banner with user info -->
+    <div class="welcome-banner">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="welcome-title">Welcome back, {{ request.user }}!</h2>
+                <p class="mb-0">Access your courses and learning materials below</p>
+                <div class="date-display">
+                    <i class="ti ti-calendar me-1"></i> {{ '2025-06-22'|date:"F d, Y" }}
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'notes_search' %}" class="btn btn-primary rounded-pill px-4">
+                    <i class="ti ti-search me-2"></i>Search Entries
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses section loaded via template tag -->
+    <div class="dashboard-content">
         {% dash_courses request.user %}
+    </div>
 </div>
 {% endblock content %}

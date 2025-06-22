@@ -3,44 +3,100 @@
 {% block title %}{{ course.abbreviation }}{% endblock title %}
 
 {% block content %}
-<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb">
+<style>
+    /* Custom styling for the course page */
+    .hover-shadow:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-3px);
+        cursor: pointer;
+    }
+    
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+    
+    .domain-card {
+        border-radius: 10px;
+        background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+    }
+    
+    .domain-card:hover {
+        background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+    }
+    
+    .term-btn {
+        transition: all 0.2s ease;
+        border-width: 1px;
+    }
+    
+    .term-btn:hover {
+        background-color: var(--bs-primary);
+        color: white;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .domain-number {
+            width: 40px !important;
+            height: 40px !important;
+        }
+    }
+</style>
+
+<!-- Improved breadcrumb with better spacing and styling -->
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-4 px-3 py-2 bg-light rounded-3">
+    <ol class="breadcrumb mb-0 py-1">
         <li class="breadcrumb-item">
-            <a href="{% url 'dashboard' %}">Home</a>
+            <a href="{% url 'dashboard' %}" class="text-decoration-none">
+                <i class="ti ti-home"></i> Home
+            </a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">
+        <li class="breadcrumb-item active fw-semibold" aria-current="page">
             {{ course }}
         </li>
     </ol>
 </nav>
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-between mb-3">
-        <button class="btn btn-sm btn-primary mx-2 d-flex flex-row justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#termInlineModal">
-            <i class="ti ti-circle-plus fs-5"></i>
-            <span class="mx-1">Add Term </span>
-            <i class="ti ti-vocabulary fs-5"></i>
-        </button>
-
-        <a class="btn btn-success" href="{% url 'create_domain' course.id %}">
-            <i class="ti ti-plus fs-5"></i>
-            Add Domain
-        </a>
+    <!-- Enhanced header section with course title and actions -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold text-primary mb-0">{{ course }}</h1>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex justify-content-md-end justify-content-center gap-2">
+                <button class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#termInlineModal">
+                    <i class="ti ti-circle-plus me-1"></i>
+                    Add Term
+                </button>
+                <a class="btn btn-success d-flex align-items-center" href="{% url 'create_domain' course.id %}">
+                    <i class="ti ti-plus me-1"></i>
+                    Add Domain
+                </a>
+            </div>
+        </div>
     </div>
 
-    <p class="display-4 text-center text-dark mb-5">{{ course }}</p>
-
-    <div class="row">
-        <div class="col-lg-8 col-md-12 col-sm-12">
-            <div class="card">
+    <div class="row g-4">
+        <!-- Domains section with improved card styling -->
+        <div class="col-lg-8 col-md-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary bg-opacity-10 border-0">
+                    <h4 class="card-title mb-0">
+                        <i class="ti ti-category me-2"></i>Course Domains
+                    </h4>
+                </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row g-4">
                         {% for domain in course.domains.all %}
-                        <div class="col-lg-6 col-md-12 col-sm-12">
-                            <div class="card domain-card" onclick="openDomain(this)"
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="card domain-card h-100 border-0 shadow-sm hover-shadow transition-all" onclick="openDomain(this)"
                                 data-url="{{ domain.get_absolute_url }}">
-                                <div class="card-body">
-                                    <h5 class="text-center">Domain&nbsp;{{domain.number}}.&nbsp;{{domain.name }}</h5>
+                                <div class="card-body d-flex flex-column">
+                                    <div class="domain-number rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 48px; height: 48px;">
+                                        {{domain.number}}
+                                    </div>
+                                    <h5 class="text-center">{{domain.name }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -49,22 +105,35 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-12 col-sm-12">
-            <div class="card">
+        
+        <!-- Terms section with improved organization -->
+        <div class="col-lg-4 col-md-12">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary bg-opacity-10 border-0">
+                    <h4 class="card-title mb-0">
+                        <i class="ti ti-vocabulary me-2"></i>Terminology
+                    </h4>
+                </div>
                 <div class="card-body">
-                    {% for term in terms %}
-                    <button type="button" class="btn btn-sm btn-primary m-1 text-center" onclick="showDefinition(this)"
-                        data-term="{{ term.name }}" data-definition="{{ term.definition }}">
-                        {{ term.name }}
-                    </button>
-                    {% endfor %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for term in terms %}
+                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1 term-btn" 
+                            onclick="showDefinition(this)"
+                            data-term="{{ term.name }}" 
+                            data-definition="{{ term.definition }}">
+                            {{ term.name }}
+                        </button>
+                        {% empty %}
+                        <p class="text-muted">No terms available for this course.</p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% include 'includes/create_term_inline.html' with entry=entry %}
 
+{% include 'includes/create_term_inline.html' with entry=entry %}
 {% endblock content %}
 
 {% block custom_js %}
@@ -78,7 +147,6 @@
             title: {
                 alertIcon: "info",
                 text: `${term}`,
-
             },
             text: `${definition}`,
             centerContent: true,
@@ -89,7 +157,12 @@
         })
     }
 
+    function openDomain(card) {
+        const url = card.getAttribute('data-url');
+        window.location.href = url;
+    }
 </script>
+
 <script>
     var courseId = "{{ course.id }}";
 

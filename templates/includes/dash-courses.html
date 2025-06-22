@@ -1,16 +1,147 @@
-<div class="row">
-    <h4 class="text-center display-4">Courses</h4>
-    {% for course in courses %}
-    <div class="col-lg-4 col-md-6 col-sm-6">
-        <div class="card course-card" onclick="openCourse(this)"
-            data-url="{{ course.get_absolute_url }}">
-            <div class="card-body">
-                <h5 class="card-title fw-semibold mb-2">
-                    {{ course.name }}
-                </h5>
-                <small class="mb-0">{{course.abbreviation}}</small>
+<div class="courses-section">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 fw-bold text-primary mb-0">
+            <i class="ti ti-books me-2"></i>Your Courses
+        </h2>
+        
+        <!-- Add course button - if you have this functionality -->
+        <a href="#" class="btn btn-success btn-sm rounded-pill px-3">
+            <i class="ti ti-plus me-1"></i>Add Course
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {% for course in courses %}
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+            <div class="card course-card h-100 border-0 shadow-sm hover-lift" onclick="openCourse(this)"
+                data-url="{{ course.get_absolute_url }}">
+                <!-- Color strip at top of card -->
+                <div class="card-top-strip" style="height: 5px; background: var(--bs-primary); border-radius: 8px 8px 0 0;"></div>
+                
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title fw-bold mb-2 text-primary">
+                                {{ course.name }}
+                            </h5>
+                            <div class="course-code mb-3">
+                                <span class="badge bg-light text-dark">{{course.abbreviation}}</span>
+                            </div>
+                        </div>
+                        <!-- Circular icon for visual interest -->
+                        <div class="course-icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 45px; height: 45px; flex-shrink: 0;">
+                            <i class="ti ti-book-2"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Course stats - these are placeholder values, replace with real data if available -->
+                    <div class="course-stats d-flex mt-2">
+                        <div class="me-3 d-flex align-items-center">
+                            <i class="ti ti-category me-1 text-muted"></i>
+                            <small class="text-muted">{{ course.domains.all|length }} Domains</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="ti ti-file-text me-1 text-muted"></i>
+                            <small class="text-muted">{{ course.get_entry_count }} Entries</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card footer with last updated -->
+                <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-4">
+                    <small class="text-muted d-flex align-items-center">
+                        <i class="ti ti-clock me-1"></i> Last modified: {{ course.updated|date:"F j, Y" }} at {{ course.updated|date:"g:i A" }}
+                        <span class="ms-auto">
+                            <i class="ti ti-user me-1"></i>
+                        </span>
+                    </small>
+                </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state text-center p-5 bg-light rounded-3">
+                <div class="empty-state-icon mb-3">
+                    <i class="ti ti-book-off text-muted" style="font-size: 3rem;"></i>
+                </div>
+                <h4>No courses yet</h4>
+                <p class="text-muted">You don't have any courses yet. Get started by adding your first course.</p>
+                <a href="#" class="btn btn-primary">
+                    <i class="ti ti-plus me-1"></i>Add Your First Course
+                </a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
+
+<style>
+    /* Course card styling */
+    .course-card {
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .course-card .card-title {
+        transition: color 0.2s ease;
+        font-size: 1.15rem;
+    }
+    
+    .course-card:hover .card-title {
+        color: var(--bs-primary) !important;
+    }
+    
+    .course-icon {
+        transition: all 0.3s ease;
+    }
+    
+    .course-card:hover .course-icon {
+        background-color: var(--bs-primary) !important;
+        color: white !important;
+    }
+    
+    .course-code .badge {
+        font-weight: 500;
+        padding: 5px 10px;
+        border-radius: 6px;
+        background-color: rgba(var(--bs-primary-rgb), 0.1);
+        color: var(--bs-primary);
+        font-size: 0.85rem;
+    }
+    
+    .empty-state {
+        border: 2px dashed #dee2e6;
+    }
+    
+    .courses-section h2 {
+        position: relative;
+    }
+    
+    /* Add title underline effect */
+    .courses-section h2:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--bs-primary);
+        border-radius: 3px;
+    }
+</style>
+
+<script>
+    function openCourse(card) {
+        const url = card.getAttribute('data-url');
+        window.location.href = url;
+    }
+</script>
