@@ -25,7 +25,6 @@ hyperlink==21.0.0
 idna==3.8
 incremental==24.7.2
 kombu==5.4.0
-Markdown==3.7
 msgpack==1.0.8
 oauthlib==3.2.2
 pillow==10.4.0

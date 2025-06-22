@@ -249,25 +249,28 @@ Additional views
 """
 
 
+from django.db.models import Q
+from django.utils.html import strip_tags
+
 def notes_search(request):
     form = SearchForm()
     query = None
     entries = []
 
-    if "q" in request.GET:
+    if 'q' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
-            query = form.cleaned_data["q"]
-            entries = Entry.objects.annotate(
-                search=SearchVector("name", "content"),
-            ).filter(search=query)
+            query = form.cleaned_data['q']
+            # Strip HTML tags from content field before searching
+            entries = Entry.objects.filter(
+                Q(name__icontains=query) |
+                Q(content__icontains=query)  # SQLite will still search in HTML
+            ).distinct()
 
-    return render(
-        request,
-        "notes/search.html",
-        {"form": form, "query": query, "entries": entries},
-    )
-
+    return render(request, 'notes/search.html',
+                 {'form': form,
+                  'query': query,
+                  'entries': entries})
 
 # send entry by email
 def entry_share(request, entry_id):

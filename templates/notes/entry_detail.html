@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load notes_tags %}
 
 {% block title %}{{entry.name}}{% endblock title %}
 
@@ -13,6 +12,32 @@
     img {
         display: flex;
         width: 100%;
+    }
+    /* Additional styling for Quill content */
+    .ql-editor {
+        padding: 0;
+    }
+    
+    /* Ensure proper display of Quill-generated content */
+    .text-dark p {
+        margin-bottom: 1rem;
+    }
+    
+    .text-dark blockquote {
+        border-left: 4px solid #ccc;
+        padding-left: 16px;
+        margin-left: 0;
+    }
+    
+    .text-dark pre {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    
+    .text-dark img {
+        max-width: 100%;
+        height: auto;
     }
 </style>
 
@@ -63,7 +88,7 @@
             </div>
 
             <div class="text-dark">
-                {{ entry.content|markdown }}
+                {{ entry.content|safe }}
             </div>
         </div>
     </div>
@@ -74,6 +99,7 @@
 {% endblock content %}
 
 {% block custom_js %}
+<!-- JavaScript remains unchanged -->
 <script>
     var courseId = "{{ entry.domain.course.id }}";
 

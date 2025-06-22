@@ -13,11 +13,12 @@
         {% for entry in entries %}
         <div class="col border-dark link dark border-2">
             <a class="card course-card link-dark p-2" href="{{ entry.get_absolute_url }}">
-                <small class="text-muted text-center mb-2">{{entry.domain.course}} &rightsquigarrow; {{entry.domain}}</small>
+                <small class="text-muted text-center mb-2">{{entry.domain.course}} &rightsquigarrow;
+                    {{entry.domain}}</small>
                 <h3 class="card-title fw-semibold mb-2">
                     {{ entry.name }}
                 </h3>
-                <p>{{ entry.content|markdown|truncatewords_html:12 }}</p>
+                <p>{{ entry.content|striptags|truncatewords:30|safe }}</p>
             </a>
         </div>
         {% empty %}

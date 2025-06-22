@@ -11,7 +11,7 @@
 			<h1>Create a new entry</h1>
 			<p>Fill on the form fields as required</p>
 
-			<form method="post" onsubmit="createEntry()" id="entry-form">
+			<form method="post" onsubmit="return createEntry(event)" id="entry-form">
 				{% csrf_token %}
 				<div class="mb-3">
 					<label for="id_name" class="form-label">Name</label>
@@ -19,7 +19,9 @@
 				</div>
 				<div class="form-group mb-3">
 					<label for="id_content" class="form-label">Content</label>
-					<textarea id="id_content" name="content"></textarea>
+					<textarea id="id_content" name="content" style="display: none;"></textarea>
+					<!-- Quill editor container -->
+					<div id="editor-container" style="height: 300px; border-radius: 0.25rem;"></div>
 				</div>
 				<button class="btn btn-outline-success" type="submit">Add Entry</button>
 			</form>
@@ -28,27 +30,39 @@
 </div>
 
 <script>
-	const easyMDE = new EasyMDE({
-		element: document.getElementById('id_content'),
-		toolbar: [
-			"heading-smaller", "heading-bigger", "|",
-			"bold", "italic", "strikethrough", "|",
-			"code", "|",
-			"unordered-list", "ordered-list", "|",
-			"link", "image", "horizontal-rule", "|",
-			"preview", "side-by-side", "fullscreen", "|",
-			"undo", "redo", "|",
-		],
-		status: ["autosave", "lines", "words", "cursor", ]
+	// Initialize Quill editor
+	const quill = new Quill('#editor-container', {
+		theme: 'snow',
+		modules: {
+			toolbar: [
+				['bold', 'italic', 'underline', 'strike'],
+				['blockquote', 'code-block'],
+				[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+				[{ 'list': 'ordered'}, { 'list': 'bullet' }],
+				[{ 'script': 'sub'}, { 'script': 'super' }],
+				[{ 'indent': '-1'}, { 'indent': '+1' }],
+				[{ 'direction': 'rtl' }],
+				[{ 'size': ['small', false, 'large', 'huge'] }],
+				[{ 'color': [] }, { 'background': [] }],
+				[{ 'font': [] }],
+				[{ 'align': [] }],
+				['link', 'image'],
+				['clean']
+			]
+		},
+		placeholder: 'Write your content here...',
 	});
-
 
 	function createEntry(event) {
 		event.preventDefault();
 		const form = document.querySelector('#entry-form');
 		const textarea = form.querySelector('#id_content');
-		textarea.value = easyMDE.value();
+		
+		// Get content from Quill and update the hidden textarea
+		textarea.value = quill.root.innerHTML;
+		
 		form.submit();
-	};
+		return false;
+	}
 </script>
 {% endblock %}
